@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="stopBox" @click="divClicked" style="background-color: silver; width: 200px; height: 200px;">
+        <span @click="spanClicked" style="background-color: darkseagreen; padding: 50px;">
+            <input type="button" @click.stop="buttonClicked" value="MyButton">
+        </span> 
+    </div>
+    <script>
+         var stopBox = new Vue({
+            el : '#stopBox',
+            methods : {
+                divClicked() {
+                    console.log("div clicked");
+                },
+                spanClicked() {
+                    console.log("span clicked");
+                },
+                buttonClicked() {
+                    console.log("button clicked");
+                }
+            }    
+        });
+    </script>
+    <hr style="margin:60px;">
+
+    <div id="preventBox">
+        <a href="http://www.baidu.com" @click.prevent="linkClicked">MyLink</a>
+    </div>
+    <script>
+        var preventBox = new Vue({
+            el : '#preventBox',
+            methods : {
+                linkClicked() {
+                    console.log("link clicked");
+                }
+            }    
+        })
+    </script>
+    <hr style="margin: 60px;">
+
+    <div id="captureBox" @click.capture="divClicked" style="background-color: silver; width: 200px; height: 200px;">
+        <span @click="spanClicked" style="background-color: darkseagreen; padding: 50px;">
+            <input type="button" @click="buttonClicked" value="MyButton">
+        </span> 
+    </div>
+    <script>
+         var captureBox = new Vue({
+            el : '#captureBox',
+            methods : {
+                divClicked() {
+                    console.log("div clicked");
+                },
+                spanClicked() {
+                    console.log("span clicked");
+                },
+                buttonClicked() {
+                    console.log("button clicked");
+                }
+            }    
+        });
+    </script>
+    <hr style="margin: 60px;">
+
+    <div id="selfBox" @click="divClicked" style="background-color: silver; width: 200px; height: 200px;">
+        <span @click.self="spanClicked" style="background-color: darkseagreen; padding: 50px;">
+            <input type="button" @click="buttonClicked" value="MyButton">
+        </span> 
+    </div>
+    <script>
+         var selfBox = new Vue({
+            el : '#selfBox',
+            methods : {
+                divClicked() {
+                    console.log("div clicked");
+                },
+                spanClicked() {
+                    console.log("span clicked");
+                },
+                buttonClicked() {
+                    console.log("button clicked");
+                }
+            }    
+        });
+    </script>
+    <hr style="margin: 60px;">
+
+    <div id="onceBox">
+        <a href="http://www.baidu.com" @click.prevent.once="linkClicked">MyLink</a>
+    </div>
+    <script>
+        var onceBox = new Vue({
+            el : '#onceBox',
+            methods : {
+                linkClicked() {
+                    console.log("link clicked");
+                }
+            }    
+        })
+    </script>
+    <hr style="margin: 60px;">
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="myBox1">
+        <h3>{{ myMsg }}</h3>
+        <input type="button" value="启动" @click="startClicked">
+        <input type="button" value="停止" @click="stopClicked">
+    </div>
+
+<script>
+    var box1 = new Vue({
+        el: "#myBox1",
+        data: {
+            myMsg: "这一生关于你的风景",
+            myTimer: null
+        },
+        methods: {
+            startClicked() {
+                console.log("开始跑马灯效果");
+                if(!this.myTimer) {console.log("为null，创建");
+                    this.myTimer = setInterval(()=> {
+                        var start = this.myMsg.substring(0, 1);
+                        var end = this.myMsg.substring(1);
+                        this.myMsg = end + start;
+                    }, 400);
+                }
+            },
+            stopClicked() {
+                console.log("停止跑马灯效果");
+                clearInterval(this.myTimer);
+                this.myTimer = null;
+            }
+        }
+    })
+</script>
+</body>
+</html>

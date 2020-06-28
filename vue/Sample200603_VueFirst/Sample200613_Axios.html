@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Axios page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="myBox1">
+        <input type="button" value="获取头条新闻(get)" @click="getJoke">
+        <input type="button" value="获取头条新闻(post)" @click="getJokePost">
+        <p>{{ strJoke }}</p>
+    </div>
+
+
+<script>
+
+var app1 = new Vue({
+    el:"#myBox1",
+    data:{
+        strJoke:"未获取到新闻"
+    },
+    methods:{
+        getJoke:function() {
+            var selfThis = this;
+            axios.get("http://api.tianapi.com/topnews/index?key=b066ce7d73efcfb3ebfab7588ef5ee6e&num=2").then(
+                function(response){
+                    selfThis.strJoke = response.data;
+                    var newsList = response.data.newslist;
+                    selfThis.strJoke = newsList;
+                },
+                function(error) {
+                    selfThis.strJoke = "获取产生了错误";
+                }
+            )
+        },
+        getJokePost:function() {
+            var selfThis = this;
+            let obj={headers: {"Content-Type": "application/x-www-form-urlencoded"}};
+            let query = this.$qs.stringify(obj);
+            axios.post("http://api.tianapi.com/topnews/index",
+            {key:"b066ce7d73efcfb3ebfab7588ef5ee6e", num:"1"},query
+            ).then(
+                function(response){
+                    selfThis.strJoke = response.data;
+                    var newsList = response.data.newslist;
+                    selfThis.strJoke = newsList;
+                },
+                function(error) {
+                    selfThis.strJoke = "获取产生了错误";
+                }
+            )
+        }
+    }
+})
+
+</script>
+</body>
+</html>

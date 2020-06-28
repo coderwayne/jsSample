@@ -1,0 +1,15 @@
+{
+  "name": "laohupackage",
+  "version": "2.3.6",
+  "description": "wayne's first npm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wayne",
+  "license": "ISC",
+  "dependencies": {
+    "qs": "^6.9.4"
+  },
+  "devDependencies": {}
+}

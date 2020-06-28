@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue test page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .borderImg {border:3px solid green;}
+    </style>
+</head>
+
+<body>
+    <div id="myBox">
+        {{ strMessage + "!" }}
+    </div>
+
+    <hr>
+    <h2>v-text</h2>
+    <span v-text="myText + '!!!'" id="mySpan"></span>
+
+    <hr>
+    <h2>v-html (渲染的是innerHTML)</h2>
+    <div id="myBox3">
+        <span v-html="content"></span>
+        <span v-text="content"></span>
+    </div>
+
+    <hr>
+    <h2>v-on (事件)</h2>
+    <div id="myBox4">
+        <input type="button" value="单击演示" v-on:click="buttonClicked">
+        <input type="button" value="双击演示" @dblclick="dblButtonClicked">
+        <span @click="labelClicked">{{ myText }}</span>
+        <input type="text" @keyup.enter="keyupFunc">
+    </div>
+
+    <hr>
+    <h2>计数器</h2>
+    <div id="myBox5">
+        <button @click="sub">-</button>
+        <span>{{ count }}</span>
+        <button @click="add">+</button>
+    </div>
+
+    <hr>
+    <h2>v-show</h2>
+    <div id="myBox6">
+        <input type="button" value="显示/隐藏" @click="toggleClicked">
+        <div v-show="isShow" style="width: 100px; height: 100px; background-color: red;"></div>
+        <div v-show="age>=18" style="width: 100px; height: 100px; background-color: green;"></div>
+    </div>
+
+    <hr>
+    <h2>v-if</h2>
+    <div id="myBox7">
+        <input type="button" value="显示/隐藏" @click="toggleClicked">
+        <div v-if="isShow" style="width: 100px; height: 100px; background-color: red;"></div>
+        <div v-if="age>=18" style="width: 100px; height: 100px; background-color: green;"></div>
+    </div>
+
+    <hr>
+    <h2>v-bind</h2>
+    <div id="myBox8">
+        <button @click="toggleBorder">显示/隐藏边框</button>
+        <img :class="{borderImg:showBorder}" v-bind:src="strImgPath" :title="strImgTitle">
+    </div>
+
+    <hr>
+    <h2>v-for</h2>
+    <div id="myBox9">
+        <button @click="addItem">添加Item</button>
+        <button @click="removeItem">移除Item</button>
+        <ul>
+            <li v-for="myItem in cityArray">{{myItem}}</li>
+        </ul>
+        <ol>
+            <li v-for="(myItem, myIndex) in cityArray">{{ myIndex+1 }}-{{ myItem+"市" }}</li>
+        </ol>
+    </div>
+
+    <hr>
+    <h2>v-model</h2>
+    <div id="myBox10">
+        <input type="text" v-model="strMessage" @keyup.enter="enterClicked">
+    </div>
+
+<script>
+var app10 = new Vue({
+    el:"#myBox10",
+    data:{
+        strMessage:"data里面的message初始值"
+    },
+    methods:{
+        enterClicked:function() {
+            console.log("strMessage is "+this.strMessage);
+        }
+    }
+})
+
+var app1 = new Vue({
+    el:"#myBox",
+    data:{
+        strMessage:"Hello Vue!"
+    }
+});
+var app2 = new Vue({
+    el: "#mySpan",
+    data:{
+        myText:"赋值的文本"
+    }
+});
+var app3 = new Vue({
+    el: "#myBox3",
+    data:{
+        content:"<a href='http://www.bilibili.com/' target='_blank'>去B站</a>"
+    }
+});
+var app4 = new Vue({
+    el: "#myBox4",
+    data:{
+        myText:"原始文本"
+    },
+    methods: {
+        buttonClicked:function() {
+            alert("单击按钮点击了");
+        },
+        dblButtonClicked:function() {
+            alert("双击了按钮");
+        },
+        labelClicked:function() {
+            // alert("标签点击了");
+            this.myText += "【新的值】";
+        },
+        keyupFunc:function() {
+            console.log("你按下了回车键");
+        }
+    }
+});
+var app5 = new Vue({
+    el:"#myBox5",
+    data: {
+        count: 0
+    },
+    methods: {
+        sub:function() {
+            console.log("减减减");
+            if(this.count>0) {
+                this.count--;
+            }
+            else {
+                alert("已到最小值");
+            }
+        },
+        add:function() {
+            console.log("加加加");
+            if(this.count<10) {
+                this.count++;
+            }
+            else {
+                alert("已到最大值");
+            }
+        }
+    }
+});
+var app6 = new Vue({
+    el:"#myBox6",
+    data:{
+        isShow: false,
+        age: 25
+    },
+    methods:{
+        toggleClicked:function(){
+            this.isShow = !this.isShow;
+        }
+    }
+});
+var app7 = new Vue({
+    el:"#myBox7",
+    data:{
+        isShow: false,
+        age: 25
+    },
+    methods:{
+        toggleClicked:function(){
+            this.isShow = !this.isShow;
+        }
+    }
+});
+var app8 = new Vue({
+    el:"#myBox8",
+    data:{
+        showBorder:true,
+        strImgTitle:"ofweek的logo图",
+        strImgPath:"https://www.ofweek.com/newOFweekIndex/images/logo.png"
+    },
+    methods:{
+        toggleBorder:function() {
+            this.showBorder = !this.showBorder;
+        }
+    }
+});
+var app9 = new Vue({
+    el:"#myBox9",
+    data:{
+        cityArray:["北京", "上海", "广州", "深圳"]
+    },
+    methods:{
+        addItem:function(){
+            this.cityArray.push("武汉");
+        },
+        removeItem:function(){
+            this.cityArray.shift();
+        }
+    }
+})
+</script>
+</body>
+</html>
