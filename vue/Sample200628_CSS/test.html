@@ -21,13 +21,18 @@
         <h2 :class="['thin', 'italic']">曾付出几多心跳，来换取一堆堆的发票</h2>
         <h2 :class="['thin','red', flag?'active':'']">也许真的疯了，那个倒影多么可笑</h2>
         <h2 :class="classObj">我的美酒 跑车 相机 金表也讲究</h2>
+        <h2 :style="{color:'red', 'font-size':'32px'}">够我没有后顾野性贪玩</h2>
+        <h2 :style="h2Style">为何用到尽了至知哪样紧要</h2>
+        <h2 :style="[h2Style, h2Style2]">连自己亦都分析不了得到多与少</h2>
     </div>
     <script>
          var myBox = new Vue({
             el : '#myBox',
             data : { 
                 flag:true,
-                classObj: {red:false, thin:true, italic:false, active:false}
+                classObj: {red:false, thin:true, italic:false, active:true},
+                h2Style: {color:"green", "font-size":"32px", "font-weight":"200"},
+                h2Style2: {"font-style":"italic"}
              },
             methods : { }    
         });

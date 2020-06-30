@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <p v-for="i in 5">第{{i}}个P标签</p>
+
+        <h3 v-for="item in numberList">第{{item}}个h3标签</h3>
+
+        <table>
+            <tr v-for="item in userList">
+                <td>{{item.userName}}</td>
+                <td>{{item.age}}</td>
+                <td>{{item.gender}}</td>
+            </tr>
+        </table>
+
+
+        <ol>
+            <li v-for="(user, index) in userList">索引：{{index}}, 用户：{{user}}，用户名：{{user.userName}}</li>
+        </ol>
+
+        <ul>
+            <li v-for="(value, key, index) in userList[0]">索引：{{index}}, key：{{key}}, value：{{value}}</li>
+        </ul>
+
+        <!-- 演示为什么新版的vue必须要有key -->
+        <div v-for="item in userList">
+            <input type="checkbox">{{ item.userName }}
+        </div>
+        <hr>
+        <div v-for="item in userList" :key="item.age">
+            <input type="checkbox">{{ item.userName }}
+        </div>
+        <input type="button" value="添加新武将" @click="addUser">
+        
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: '#myBox',
+            data: {
+                numberList: [1, 2, 3, 4, 5, 6],
+                userList: [{
+                        userName: "赵云",
+                        age: 26,
+                        gender: "male"
+                    },
+                    {
+                        userName: "黄月英",
+                        age: 19,
+                        gender: "female"
+                    },
+                    {
+                        userName: "张辽",
+                        age: 35,
+                        gender: "male"
+                    },
+                ]
+            },
+            methods: {
+                addUser() {
+                    this.userList.unshift({
+                        userName: "许褚",
+                        age: 44,
+                        gender: "male"
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

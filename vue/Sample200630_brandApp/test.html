@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <el-input v-model="tmpBrandID" placeholder="品牌ID" style="width: 100px;"></el-input>
+        <el-input v-model="tmpBrandName" placeholder="品牌名称" style="width: 100px;"></el-input>
+        <el-button @click="addBrand">新增品牌</el-button>
+
+        <el-input v-model="strKeywords" placeholder="搜索关键字" style="width: 300px; margin-left:100px;"></el-input>
+        <hr>
+        <h2>所有数据</h2>
+        <el-table :data="brandList" border style="width: 100%">
+            <el-table-column prop="brandID" label="品牌ID" width="180">
+            </el-table-column>
+            <el-table-column prop="brandName" label="名称" width="180">
+            </el-table-column>
+            <el-table-column prop="createTime" label="创建时间">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="100">
+                <template slot-scope="scope">
+                    <el-button @click="deleteBrand2(scope.row.brandName)" type="text" size="small">删除</el-button>
+
+                </template>
+            </el-table-column>
+        </el-table>
+        <hr>
+        <h2>过滤数据</h2>
+        <el-table :data="mySearch2(strKeywords)" border style="width: 100%">
+            <el-table-column prop="brandID" label="品牌ID" width="180">
+            </el-table-column>
+            <el-table-column prop="brandName" label="名称" width="180">
+            </el-table-column>
+            <el-table-column prop="createTime" label="创建时间">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="100">
+                <template slot-scope="scope">
+                    <el-button @click="deleteBrand2(scope.row.brandName)" type="text" size="small">删除</el-button>
+
+                </template>
+            </el-table-column>
+        </el-table>
+
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: '#myBox',
+            data: {
+                tmpBrandID:"",
+                tmpBrandName:"",
+                strKeywords:"",
+                brandList: [{
+                    brandID: 100,
+                    brandName: "奔驰",
+                    createTime:new Date().toString()
+                },
+                {
+                    brandID: 200,
+                    brandName: "宝马",
+                    createTime:new Date().toString()
+                },
+                {
+                    brandID: 300,
+                    brandName: "奥迪",
+                    createTime:new Date().toString()
+                },{
+                    brandID: 400,
+                    brandName: "宝沃",
+                    createTime:new Date().toString()
+                },{
+                    brandID: 500,
+                    brandName: "恒驰",
+                    createTime:new Date().toString()
+                }]
+            },
+            methods: {
+                addBrand() {
+                    var brandItem = {brandID:this.tmpBrandID, brandName:this.tmpBrandName, createTime:new Date().toString()};
+                    this.brandList.push(brandItem);
+                    this.tmpBrandID = this.tmpBrandName = "";
+                },
+                deleteBrand(curBrandName) {
+                    console.log("curBrandName:"+curBrandName);
+                    this.brandList.some((myItem, index)=>{
+                        if(myItem.brandName == curBrandName){
+                            this.brandList.splice(index, 1);
+                            return true;
+                        }
+                    })
+                },
+                deleteBrand2(curBrandName) {
+                    alert("deleteBrand2");
+                    console.log("curBrandName:"+curBrandName);
+                    var index = this.brandList.findIndex(myItem =>{
+                        if(myItem.brandName == curBrandName) {
+                            return true;
+                        }
+                    });
+                    this.brandList.splice(index, 1);
+                },
+                mySearch(curKeywords) {
+                    var newList = [];
+                    this.brandList.forEach(myItem => {
+                        if(myItem.brandName.indexOf(curKeywords)>-1) {
+                            newList.push(myItem);
+                        }
+                    });
+                    return newList;
+                },
+                mySearch2(curKeywords) {
+                    var newList = [];
+                    newList = this.brandList.filter(myItem =>{
+                        if(myItem.brandName.includes(curKeywords)){
+                            return myItem;
+                        }
+                    });
+                    newList.push({
+                    brandID: 1000,
+                    brandName: "玛莎拉蒂",
+                    createTime:new Date().toString()
+                })
+                    return newList;
+
+                    //这里也可以不用中间变量，直接return
+                    // return this.brandList.filter(myItem =>{
+                    //     if(myItem.brandName.includes(curKeywords)){
+                    //         return myItem;
+                    //     }
+                    // });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
