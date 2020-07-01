@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <p>{{ msg }}</p>
+        <p>{{ msg | myFilter1 }}</p>
+        <p>{{ msg | myFilter2("BBB") }}</p>
+        <p>{{ msg | myFilter1 | myFilter3}}</p>
+        <p>{{new Date() | timeFilter}}</p>
+        <p>{{ msg | myFilter4("COOL") }}</p>
+    </div>
+    <script>
+        Vue.filter("myFilter1", function(curMsg){
+            return curMsg.replace(/不如/g, "AA");
+        });
+        Vue.filter("myFilter2", function(curMsg, str){
+            return curMsg.replace(/不如/g, str);
+        });
+        Vue.filter("myFilter3", function(curMsg){
+            return curMsg + "============";
+        });
+        Vue.filter("timeFilter", function(strDate){
+            var date = new Date(strDate);
+            var year = date.getFullYear();
+            var month  = date.getMonth() + 1;
+            // month=month>9?month:"0"+month;
+            month = month.toString().padStart(3,"0");
+
+            var day = date.getDate();
+            // day=day>9?day:"0"+day;
+            day = day.toString().padStart(3,"0");
+
+            var hour = date.getHours();
+            hour = hour.toString().padStart(2,"0");
+
+            var minute = date.getMinutes();
+            minute = minute.toString().padStart(2,"0");
+
+            var second = date.getSeconds();
+            second = second.toString().padStart(2,"0");
+            
+            return `${year}-${month}-${day}-${hour}:${minute}:${second}`;
+        });
+
+        var myBox = new Vue({
+            el : '#myBox',
+            data : { 
+                msg:"不如菩提树下割肉喂鹰,不如剃度出家斩断七情,不如别相逢不如别相遇,不如万劫不复了断性命,不如日照大地无天下四季,都不如都不如陪着你"
+             },
+            methods : { },
+            filters:{
+                myFilter4:function(oriString, modifyString) {
+                    return oriString.replace(/不如/g, modifyString);
+                }
+            }
+        });
+
+      
+
+      
+    </script>
+</body>
+
+</html>
