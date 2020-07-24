@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="myBox">
+        <span id="mySpan">{{ msg }}</span>
+        <input type="button" @click="changeMsg()" value="改变msg值">
+        <input type="button" @click="destroyVueItem()" value="移除vue实例">
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: '#myBox',
+            data: {
+                msg: "胡晓伟"
+            },
+            methods: {
+                myFun() {
+                    console.log("myFun action!");
+                },
+                changeMsg() {
+                    this.msg = "Ellie";
+                },
+                destroyVueItem() {
+                    this.$destroy();
+                }
+            },
+            beforeCreate() {
+                // 实例被创建之前会执行它
+                // 这个时候既访问不到data，也调用不了定义的method
+                // console.log(this.msg);
+                // this.myFun();
+            },
+            created() {
+                // 实例已经被创建好了
+                console.log(this.msg);
+                this.myFun();
+            },
+            beforeMount() {
+                // 模板已经在内存中编辑完成了，但是还未渲染到页面上
+                // 所以这个时候，页面中的元素还不能根据模板里的data来解析，下面只能输出模板字符串{{ msg }}
+                console.log(document.getElementById("mySpan").innerText);
+            },
+            mounted() {
+                // 内存中的模板已经挂载到页面中，用户可以看到渲染好的页面了
+                console.log(document.getElementById("mySpan").innerText);
+            },
+            beforeUpdate() {
+                // 数据已经更新了，但界面还没有被虚拟DOM同步过来
+                console.log("beforeUpdate：" + document.getElementById("mySpan").innerText); //还是老的值
+                console.log("beforeUpdate：" + this.msg); //改变后的值
+            },
+            updated() {
+                // 数据和实际DOM都更新了
+                console.log("beforeUpdate：" + document.getElementById("mySpan").innerText); //还是老的值
+                console.log("beforeUpdate：" + this.msg); //改变后的值 
+            },
+            beforeDestroy() {
+                // 这里预留，还没有弄清楚beforeDestroy,destroyed区别所在
+                // Vue实例销毁前的操作，此时实例上的所有data和methods，以及过滤器，指令都可用，还没有真正执行销毁的过程
+                console.log("beforeDestroy：" + this.msg);
+
+                setTimeout(function () {
+                    console.log("beforeDestroy：" + this.msg);
+                    this.myFun();
+                }, 5000);
+            },
+            destroyed() {
+                // Vue实例已经被完全销毁，此时实例上的所有data和methods，以及过滤器，指令都不可用
+                setTimeout(function () {
+                    console.log("destroyed：" + this.msg);
+                    this.myFun();
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+
+</html>

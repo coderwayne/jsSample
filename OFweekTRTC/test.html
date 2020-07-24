@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div id="mainBox" style="height: 100%;">
+        <el-container style="height: 100%;">
+            <el-header style="background-color:cornflowerblue;">Header</el-header>
+            <el-container>
+                <el-aside width="200px" style="background-color: antiquewhite;">Aside</el-aside>
+                <el-container>
+                    <el-main style="background-color: aqua;">Main</el-main>
+                 
+                    <el-footer style="background-color: red; height: 300px;">：底栏容器。</el-footer>
+                </el-container>
+                
+                <el-aside width="200px" style="background-color:antiquewhite;">Aside</el-aside>
+            </el-container>
+            <el-footer style="background-color:cornflowerblue;">Footer</el-footer>
+        </el-container>
+    </div>
+    <script>
+        var mainBox = new Vue({
+            el: '#mainBox',
+            data: {
+                textarea: 'sdfsdf',
+                input: ''
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>

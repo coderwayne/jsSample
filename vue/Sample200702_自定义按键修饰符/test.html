@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <p>{{ msg }}</p>
+        <input type="button" value="提交" @click="msg = ''">
+        <input type="text" @keyup.enter="updateMsg">
+        <input type="text" @keyup.113="updateMsg" v-hxwfocus>
+        <input type="text" @keyup.hxw="updateMsg">
+        <p v-hxwcolor="'red'">蓝蓝的天空银河里，有只小白船，船上有棵桂花树，白兔在游玩</p>
+        <p v-hxwfontsize="36">桨儿桨儿看不见，船上也没帆，飘呀飘呀，飘向云天外</p>
+        <p v-hxwbgcolor="'pink'">蓝蓝的天空银河里，有只小白船，船上有棵桂花树，白兔在游玩</p>
+    </div>
+    <script>
+        Vue.config.keyCodes.hxw = 113;
+
+        
+        // 基于Vue.directive自定义的指令，内部字母不能大写
+        Vue.directive("hxwfocus", {
+            // 官方提供了五个钩子函数来供我们使用，分别代表了一个组件的各个生命周期
+            bind: function (el) {
+                // 只调用一次，指令第一次绑定到元素时调用
+                // 用这个钩子函数可以定义一个在绑定时执行一次的初始化动作。
+                // 这个时候元素还没有插入到DOM中去，这时候，调用像focus这样的方法没有作用
+                // 和样式相关的操作，一般都可以放在这里
+            },
+            inserted: function (el) {
+                // 被绑定元素插入父节点时调用（父节点存在即可调用，不必存在于 document 中）。
+                // 这个时候元素已经插入到DOM中
+                // 和行为相关的操作，一般都可以放在这里
+                el.focus();
+            },
+            updated: function (el) {
+                // 被绑定元素所在的模板更新时调用，而不论绑定值是否变化。
+                // 通过比较更新前后的绑定值，可以忽略不必要的模板更新
+                // 当VNode更新的时候，会执行此方法，可能会触发多次
+            },
+            componentUpdated: function(el) {
+                // 被绑定元素所在模板完成一次更新周期时调用。
+            },
+            unbind: function(el) {
+                // 只调用一次， 指令与元素解绑时调用。
+            }
+        });
+
+        Vue.directive("hxwcolor", {
+            bind: function (el,binding) {
+                el.style.color = binding.value;
+                console.log(binding.name);
+                console.log(binding.value);
+                console.log(binding.expression)
+            },
+            inserted: function (el) {
+
+            },
+            updated: function (el) {
+
+            },
+            componentUpdated: function(el) {
+
+            },
+            unbind: function(el) {
+
+            }
+        });
+
+        var myBox = new Vue({
+            el: '#myBox',
+            data: {
+                msg: "小白船"
+            },
+            methods: {
+                updateMsg() {
+                    this.msg = "ABC-----" + new Date().toString();
+                }
+            },
+            directives:{
+                // 自定义私有指令
+                "hxwfontsize":{
+                    bind: function(el, binding) {
+                        el.style.fontSize = parseInt(binding.value).toString()+"px";
+                    }
+                },
+                "hxwbgcolor":function(el, binding) {
+                    //这是一种简写，等同于把代码同时写到了bind和update中去
+                    el.style.backgroundColor = binding.value;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
