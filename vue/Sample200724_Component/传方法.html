@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <template id="myTemplate">
+        <div style="background-color:powderblue; width:400px; height:100px">
+            <span>私有组件</span><input type="button" @click="myclick" value="ClickMe">
+        </div>
+    </template>
+    <div id="myBox">
+        <mylogin v-on:childfun="parentFun"></mylogin>
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                dataFromChild: null
+            },
+            methods: {
+                parentFun(strParam) {
+                    console.log("parent function fired:" + strParam);
+                    this.dataFromChild = strParam;
+                }
+            },
+            components: {
+                mylogin: {
+                    template: "#myTemplate",
+                    data() {
+                        return {
+                            childMsg: {
+                                nickname: "胡晓伟",
+                                age: 37
+                            }
+                        }
+                    },
+                    methods: {
+                        myclick() {
+                            this.$emit("childfun", "老胡");
+                            this.$emit("childfun", this.childMsg);
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

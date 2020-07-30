@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .v-enter,.v-leave-to {
+            opacity:0;
+            transform: translateX(150px);
+        }
+
+        .v-enter-active, .v-leave-active{
+            transition:all 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="myBox">
+        <a href="" @click.prevent="flag=true;">登录</a>
+        <a href="" @click.prevent="flag=false;">注册</a>
+        <my-login v-if="flag"></my-login>
+        <my-registry v-else="flag"></my-registry>
+        <hr>
+        <a href="" @click.prevent="comName='my-login'">登录</a>
+        <a href="" @click.prevent="comName='my-registry';">注册</a>
+        <component :is="comName"></component>
+        <hr>
+        <a href="" @click.prevent="comName='my-login'">登录</a>
+        <a href="" @click.prevent="comName='my-registry';">注册</a>
+        <transition mode="in-out">
+            <component :is="comName"></component>
+        </transition>
+        
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                flag: true,
+                comName:"my-login"
+
+            },
+            methods: {
+                testFun(str) {
+                    alert(str);
+                }
+            },
+            components: {
+                myLogin: {
+                    template: "<div style='background-color:red; width:200px; height:100px;'>登录控件</div>"
+                },
+                myRegistry: {
+                    template: "<div style='background-color:green; width:200px; height:100px;'>注册控件</div>"
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

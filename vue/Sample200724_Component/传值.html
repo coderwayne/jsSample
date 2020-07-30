@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <mylogin v-bind:hxw="myMsg"></mylogin>
+    </div>
+    <script>
+         var myBox = new Vue({
+            el : "#myBox",
+            data : { myMsg:"父容器的msg" },
+            methods : { },
+            components:{
+                mylogin:{
+                    template:"<div @click='change' style='background-color:yellow; width:400px; height:100px'>私有组件--{{hxw}}--{{nickname}}--{{city}}</div>",
+                    data: function () {
+                        return {
+                            nickname: "老胡",
+                            city:"深圳"
+                        };
+                    },
+                    props:["hxw"],
+                    methods:{
+                        change(){
+                            this.nickname = "张飞";
+                            this.city = "河北";
+                            this.hxw = "god bless me"; //虽然可以更改，但是会有警告，不要直接改props，它是只读的，如果需要读写，用data
+                        }
+                    }
+                },
+                
+            } 
+        });
+    </script>
+</body>
+
+</html>

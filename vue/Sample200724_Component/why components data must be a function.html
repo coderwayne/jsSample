@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <template id="myTmp1">
+        <div style='background-color:yellow; width:200px; height:250px'>{{ count }},{{ nickname }}
+            <br>
+            <input type="button" @click="addCount()" value="增加">
+        </div>
+    </template>
+    <div id="myBox" style="float: left;">
+        <my-login id="login1"></my-login>
+        <my-login id="login2"></my-login>
+        <my-login id="login3"></my-login>
+    </div>
+    <div id="myBox2" style="float: left; margin-left: 30px;">
+        <my-login id="login1"></my-login>
+        <my-login id="login2"></my-login>
+        <my-login id="login3"></my-login>
+    </div>
+    <script>
+        var dataObj = {
+            count: 0,
+            nickname: "老胡"
+        }
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {},
+            methods: {},
+            components: {
+                myLogin: {
+                    template: "#myTmp1",
+                    data: function () {
+                        return dataObj;
+                    },
+                    methods: {
+                        addCount() {
+                            this.count++;
+                        }
+                    }
+                }
+            }
+        });
+        var myBox2 = new Vue({
+            el: "#myBox2",
+            data: {},
+            methods: {},
+            components: {
+                myLogin: {
+                    template: "#myTmp1",
+                    data: function () {
+                        return {
+                            count: 0,
+                            nickname: "老胡"
+                        };
+                    },
+                    methods: {
+                        addCount() {
+                            this.count++;
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
