@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <template id="inputTmpl">
+        <div>
+            <el-input v-model="user" placeholder="评论人" style="width: 120px;"></el-input>
+            <el-input v-model="content" placeholder="请输入评论内容"></el-input>
+            <el-button type="primary" @click="postComment()">提交评论</el-button>
+        </div>
+    </template>
+
+    <div id="myBox">
+        <cmtbox @myfun="loadComments"></cmtbox>
+        <el-table :data="tableData" style="width: 100%">
+            <el-table-column prop="content" label="评论内容">
+            </el-table-column>
+            <el-table-column prop="nickname" label="用户" width="180">
+            </el-table-column>
+        </el-table>
+    </div>
+
+    <script>
+        var inputBox = {
+            data: function () {
+                return {
+                    user: "sdf",
+                    content: "sdfsd"
+                }
+            },
+            template: "#inputTmpl",
+            methods: {
+                postComment() {
+                    var commentItem = {
+                        id: Date.now(),
+                        nickname: this.user,
+                        content: this.content
+                    };
+
+                    //从localStorage中获取所有的评论
+                    var list = JSON.parse(localStorage.getItem("cmts") || "[]");
+                    list.unshift(commentItem);
+                    //重新保存最新的评论列表
+                    localStorage.setItem("cmts", JSON.stringify(list));
+
+                    this.user = this.content = "";
+
+                    this.$emit("myfun","just joke");
+                }
+            }
+        }
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                tableData: [{
+                        id: Date.now(),
+                        content: "我就回去别引出我泪水，尤其明知水瓶座最爱是流泪",
+                        nickname: "杨千嬅"
+                    },
+                    {
+                        id: Date.now(),
+                        content: "霎眼廿七岁 时日无多 方不敢偷惰，宏愿纵未了 奋斗总不太晚",
+                        nickname: "陈奕迅"
+                    },
+                    {
+                        id: Date.now(),
+                        content: "Girl, you know I want your love, Your love was handmade for somebody like me",
+                        nickname: "Ed Sheeran"
+                    },
+                    {
+                        id: Date.now(),
+                        content: "咁讲你不知我爱的只有你，你啊你啊，哪会转头就要走",
+                        nickname: "魏如萱"
+                    }
+                ]
+            },
+            created() {
+                console.log("created");
+                localStorage.setItem("cmts", JSON.stringify(this.tableData));
+                this.loadComments();
+            },
+            methods: {
+                loadComments(strTest) {
+                    console.log(strTest);
+                    var list = JSON.parse(localStorage.getItem("cmts") || "[]");
+                    this.tableData = list;
+                }
+            },
+            components: {
+                cmtbox: inputBox
+            }
+        });
+    </script>
+</body>
+
+</html>
