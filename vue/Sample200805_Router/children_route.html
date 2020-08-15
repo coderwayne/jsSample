@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .box {
+
+            text-align: center;
+            vertical-align: middle;
+            line-height: 200px;
+            background-color: darkgray;
+            padding: 30px;
+        }
+
+        .myActive {
+            color: yellow;
+            background-color: indianred;
+            font-size: 48px;
+        }
+
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(140px);
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <template id="tmplAccount">
+        <div class="box">
+            <h3>Account控件</h3>
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/signUp">注册</router-link>
+            <transition mode="out-in">
+                <router-view></router-view>
+            </transition>
+
+        </div>
+    </template>
+    <template id="tmplLogin">
+        <div class="box" style="background-color:lightcoral;">登录控件</div>
+    </template>
+    <template id="tmplSignUp">
+        <div class="box" style="background-color:khaki;">注册控件</div>
+    </template>
+    <div id="myBox">
+        <router-view></router-view>
+    </div>
+    <script>
+        var account = {
+            template: "#tmplAccount"
+        };
+
+        var login = {
+            template: "#tmplLogin"
+        };
+
+        var signUp = {
+            template: "#tmplSignUp"
+        };
+
+        var myRouter = new VueRouter({
+            routes: [
+                {path:"/",component:account},
+                {
+                path: "/account",
+                component: account,
+                // 子路由的path前面不要带"/"，否则永远以根路径开始请求，这样不方便用户理解URL地址
+                children: [{
+                        path: "login",
+                        component: login
+                    },
+                    {
+                        path: "signUp",
+                        component: signUp
+                    }
+                ]
+            }]
+        });
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {},
+            methods: {},
+            router: myRouter
+        });
+    </script>
+</body>
+
+</html>

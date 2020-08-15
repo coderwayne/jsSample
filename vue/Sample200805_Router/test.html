@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .box {
+            width: 350px;
+            height: 200px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 200px;
+        }
+
+        /* 修改router-line的第一种方法，改官方设置好的css类的内容 */
+        /* .router-link-active {
+            color: white;
+            background-color: dodgerblue;
+            font-size: 48px;
+        } */
+
+        .myActive {
+            color: yellow;
+            background-color: indianred;
+            font-size: 48px;
+        }
+
+        .v-enter,.v-leave-to {
+            opacity: 0;
+            transform: translateX(140px);
+        }
+
+        .v-enter-active,.v-leave-active {
+            transition:all 0.5s ease;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <template id="loginTmpl">
+        <div class="box" style="background-color:lightcoral;">登录{{$route.path}}控件--{{this.$route.query.myid}}--{{this.$route.query.nickname}}
+            <input type="button" value="TestButton" @click="testFun">
+        </div>
+        
+    </template>
+    <template id="signUpTmpl">
+        <div class="box" style="background-color:khaki;">注册{{$route.path}}--{{this.$route.params.myid}}--{{this.$route.params.nickname}}控件
+        </div>
+    </template>
+    <div id="myBox">
+        <a href="#/login?myid=23&nickname=老胡">登录</a>
+        <a href="#/signUp/2020/可可">注册</a>
+        <br><br><br>
+        <router-link to="/login?myid=211&nickname=Ellie" tag="span">登录</router-link>
+        <router-link to="/signUp/2019/艾克森" tag="span">注册</router-link>
+
+        <transition mode="out-in">
+            <router-view style="margin-top: 35px;"></router-view>
+        </transition>        
+    </div>
+    <script>
+        var login = {
+            template: "#loginTmpl",
+            created() {
+                console.log(this.$route.path);
+            },
+            methods:{
+                testFun() {
+                    console.log("当前$route.path:" + this.$route.path);
+                }
+            }
+        };
+        var signUp = {
+            template: "#signUpTmpl",
+            created() {
+                console.log(this.$route.path);
+            }
+        };
+
+        var routerObj = new VueRouter({
+            routes: [{
+                    path: "/",
+                    // component: login
+                    redirect: "/login"
+                },
+                {
+                    path: "/login",
+                    component: login
+                },
+                {
+                    path: "/signUp/:myid/:nickname",
+                    component: signUp
+                }
+            ],
+            /* 修改router-line的第二种方法，改成我们自己的css类 */
+            linkActiveClass: "myActive"
+        });
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {},
+            methods: {},
+            components: {
+                // loginBox: login,
+                // signUpBox: signUp
+            },
+            router: routerObj
+        });
+    </script>
+</body>
+
+</html>
