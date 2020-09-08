@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <input type="text" v-model="firstName">+
+        <input type="text" v-model="lastName">=
+        <input type="text" v-model="fullName">
+
+        {{ this.fullName }}
+        {{ this.fullName }}
+        {{ this.fullName }}
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                firstName: "",
+                lastName: ""
+            },
+            methods: {},
+            computed: {
+                fullName: function () {
+                    console.log("调用了一次"); //调用一次后将值缓存起来，下次有地方再引用是取的缓存，不会重复计算
+                    return this.firstName + "-" + this.lastName;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

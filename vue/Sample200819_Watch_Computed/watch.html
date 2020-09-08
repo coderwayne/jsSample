@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .box {
+            width: 350px;
+            height: 200px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <template id="tmplLogin">
+        <div class="box" style="background-color:lightcoral;">登录控件</div>
+    </template>
+
+    <template id="tmplReg">
+        <div class="box" style="background-color:limegreen;">注册控件</div>
+    </template>
+    <div id="myBox">
+        <input type="text" v-model="firstName">+
+        <input type="text" v-model="last_Name">=
+        <input type="text" v-model="fullName">
+
+        <br><br><br>
+        <router-link to="/login">登录</router-link>
+        <router-link to="/reg">注册</router-link>
+        <br><br><br>
+        <router-view></router-view>
+    </div>
+    <script>
+        var login = {
+            template: "#tmplLogin"
+        };
+
+        var reg = {
+            template: "#tmplReg"
+        };
+
+        var myRouter = new VueRouter({
+            routes: [{
+                path: "/login",
+                component: login
+            }, {
+                path: "/reg",
+                component: reg
+            }]
+        });
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                firstName: "",
+                last_Name: "",
+                fullName: ""
+            },
+            methods: {},
+            router: myRouter,
+            watch: {
+                firstName: function () {
+                    this.fullName = this.firstName + "-" + this.last_Name;
+                },
+                "last_Name": function (newParam) {
+                    this.fullName = this.firstName + "-" + newParam;
+                },
+                "$route.path": function (newVal, oldVal) {
+                    console.log(newVal + "---" + oldVal);
+                    if(newVal=="/login") {
+                        console.log(("欢迎进入登录页面"));
+                    }
+                    if(newVal=="/reg") {
+                        console.log("欢迎来注册");
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

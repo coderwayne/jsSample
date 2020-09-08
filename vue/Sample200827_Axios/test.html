@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<!-- http://rap2.taobao.org:38080/app/mock/249013/bookAction/getEnBookList -->
+
+<body>
+    <div id="myBox">
+        <input type="button" value="Get无参调用" @click="getNoParam">
+        <input type="button" value="Post无参调用" @click="postNoParam">
+        <br><br><br>
+        <input type="button" value="Get无参调用(写法二)" @click="getNoParam2">
+        <input type="button" value="Post无参调用(写法二)" @click="postNoParam2">
+        <br><br><br>
+        <input type="button" value="Get的Param参数调用" @click="getByParam">
+        <input type="button" value="Post的Param参数调用" @click="postByParam">
+        <br><br><br>
+        <input type="button" value="Get的Param参数调用(写法二)" @click="getByParam2">
+        <input type="button" value="Post的Param参数调用(写法二)" @click="postByParam2">
+    </div>
+    <script>
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {},
+            methods: {
+                getNoParam() {
+                    axios({
+                        url: "http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookList"
+                    }).then(res => {
+                        console.log("GET调用成功，返回的数据是：");
+                        console.log(res.data);
+                        res.data.bookList.forEach(element => {
+                            console.log(element.bookName + "--" + element.author);
+                        });
+                    })
+                },
+
+                getNoParam2() {
+                    axios.get("http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookList").then(
+                        res => {
+                            console.log("GET第二种方法调用成功，返回的数据是：");
+                            console.log(res.data);
+                        }).catch(err => {
+                        console.log(err);
+                    })
+                },
+
+                postNoParam() {
+                    axios({
+                        url: "http://rap2.taobao.org:38080/app/mock/249013/bookAction/getEnBookList",
+                        method: "post"
+                    }).then(res => {
+                        console.log("POST调用成功，返回的数据是：");
+                        console.log(res.data);
+                        res.data.bookList.forEach(element => {
+                            console.log(element.bookName + "--" + element.author);
+                        });
+                    })
+                },
+
+                postNoParam2() {
+                    axios.post("http://rap2.taobao.org:38080/app/mock/249013/bookAction/getEnBookList").then(
+                        res => {
+                            console.log("POST第二种方法调用成功，返回的数据是：");
+                            console.log(res.data);
+                            res.data.bookList.forEach(element => {
+                                console.log(element.bookName + "--" + element.author);
+                            });
+                        }
+                    )
+                },
+
+                getByParam() {
+                    axios({
+                        url: "http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookById",
+                        params: {
+                            bookId: "8323"
+                        }
+                    }).then(res => {
+                        console.log("GET调用成功，返回的数据是：");
+                        console.log(res.config.params);
+                    });
+                },
+
+                getByParam2() {
+                    axios.get("http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookById",{params:{bookId:1983}}).then(
+                        res=>{
+                            console.log("GET调用成功(第二种方式)，返回的数据是：");
+                            console.log(res.config.params);
+                        })
+                },
+
+                postByParam() {
+                    axios({
+                        url: "http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookByName",
+                        data: {
+                            bookId: "998"
+                        },
+                        method: "post"
+                    }).then(res => {
+                        console.log("POST调用成功，返回的数据是：");
+                        console.log(res.config.data);
+                    })
+                },
+
+                postByParam2() {
+                    // axios.post("http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookByName","bookId=140211").then(
+                    //     res=>{
+                    //         console.log("POST调用成功(第二种方式)，返回的数据是：");
+                    //         console.log(res.config.data);
+                    //     })
+
+                    axios.post("http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookByName",{bookId:0211}).then(
+                        res=>{
+                            console.log("POST调用成功(第二种方式)，返回的数据是：");
+                            console.log(res.config.data);
+                        })
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

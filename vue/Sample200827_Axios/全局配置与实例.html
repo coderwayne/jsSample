@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="myBox">
+        <input type="button" value="全局配置调用" @click="testFun">
+        <br><br>
+        <input type="button" value="实例调用" @click="testFun2">
+    </div>
+    <script>
+        axios.defaults.baseURL = "http://rap2.taobao.org:38080/app/mock/249013/bookAction";
+        axios.defaults.timeout = 5000;
+
+        axios.get("getBookById", {
+            params: {
+                bookId: 1983
+            }
+        }).then(res => {
+            console.log(res);
+        });
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {},
+            methods: {
+                testFun() {
+                    axios.post("getBookByName", {
+                        bookId: 0211
+                    }).then(res => {
+                        console.log(res.config.data);
+                    });
+                },
+                testFun2() {
+                    let obj1 = axios.create({
+                        baseURL:"http://rap2.taobao.org:38080/app/mock/249013/example",
+                        timeout:5000
+                    });
+
+                    obj1({
+                        url:"1585531974485",
+                        method: "get",
+                        params: {
+                            foo: "8323"
+                        }
+                    }).then(res => {
+                        console.log(res.config.params);
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
