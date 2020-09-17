@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+</head>
+
+<body>
+    <div id="myBox">
+        <input type="button" value="Test" onclick="promiseTest1()">
+    </div>
+    <div id="logBox" style="border: solid 1px #ccc; padding: 1em; margin: 15px 0;">
+        <p>Log:</p>
+    </div>
+    <script>
+        function promiseTest1() {
+            var promise = new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    resolve(2);
+                } else {
+                    reject(random+"(来自顶层方法)");
+                }
+            });
+
+            promise.then(add).then(multiply).then(add).then(multiply).then(add).then(result => {
+                log("最终值：" + result);
+            }).catch(error1);
+        }
+
+        function error1(param) {
+            log("error1调用失败，错误码：" + param)
+        }
+
+        function add(num) {
+            return new Promise(function (resolve, reject) {
+                log("当前值：" + num);
+                log("开始计算" + num + "+" + num + "...");
+
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    // 1秒后执行"+"操作
+                    setTimeout(resolve, 1000, num + num);
+                } else {
+                    reject(random+"(来自add方法)");
+                }
+                
+                
+            });
+        }
+
+        function multiply(num) {
+            return new Promise(function (resolve, reject) {
+                log("当前值：" + num);
+                log("开始计算" + num + "*" + num + "...");
+                // 1秒后执行"*"操作
+                setTimeout(resolve, 2000, num * num);
+            });
+        }
+
+        // 清除log:
+        var logBox = document.getElementById("logBox");
+        while (logBox.children.length > 1) {
+            logBox.removeChild(logBox.children[logBox.children.length - 1]);
+        }
+
+        // 输出log到页面:
+        function log(s) {
+            var p = document.createElement('p');
+            p.innerHTML = s;
+            logBox.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>

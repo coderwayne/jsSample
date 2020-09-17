@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+</head>
+
+<body>
+    <div id="myBox">
+        <input type="button" value="并行执行" onclick="promiseTest1()">
+    </div>
+    <div id="logBox" style="border: solid 1px #ccc; padding: 1em; margin: 15px 0;">
+        <p>Log:</p>
+    </div>
+    <script>
+        function promiseTest1() {
+            // 竞争落后的仍会继续执行，但执行结果将被丢弃。
+            Promise.race([getUserById(), getUserByName()]).then(function(result){
+                log(result); //打印的是参数
+            }).catch(error1);
+        }
+
+        function getUserById() {
+            return new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    // resolve("23");
+                    setTimeout(resolve, 1500, "23");
+                } else {
+                    reject(random + "(来自ById)");
+                }
+            });
+        }
+
+        function getUserByName() {
+            return new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    // resolve("胡晓伟");
+                    setTimeout(resolve, 1000, "胡晓伟");
+                } else {
+                    reject(random + "(来自ByName)");
+                }
+            });
+        }
+
+        function error1(param) {
+            log("error1调用失败，错误码：" + param)
+        }
+
+        // 清除log:
+        var logBox = document.getElementById("logBox");
+        while (logBox.children.length > 1) {
+            logBox.removeChild(logBox.children[logBox.children.length - 1]);
+        }
+
+        // 输出log到页面:
+        function log(s) {
+            var p = document.createElement('p');
+            p.innerHTML = s;
+            logBox.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+</head>
+
+<body>
+    <div id="myBox">
+        <input type="button" value="异步执行" onclick="testAsync()">
+        <input type="button" value="AJAX执行" onclick="ajaxTestAsync()">
+        <input type="button" value="测试浏览器是否支持promise" onclick="isSupported()">
+        <input type="button" value="Promise测试1" onclick="promiseTest1()">
+        <input type="button" value="Promise测试2" onclick="promiseTest2()">
+        <input type="button" value="Promise测试3" onclick="promiseTest3()">
+    </div>
+
+    <div id="test-promise-log" style="border: solid 1px #ccc; padding: 1em; margin: 15px 0;">
+        <p>Log:</p>
+    </div>
+    <script>
+        function testFun() {
+            console.log("done!");
+        }
+
+        function testAsync() {
+            console.log("before");
+            setTimeout(testFun, 1000);
+            console.log("after");
+        }
+
+        function success(info) {
+            console.log("接口调用成功" + info);
+        }
+
+        function fail(info) {
+            console.log("接口调用失败" + info);
+        }
+
+        function ajaxTestAsync() {
+            var request = new XMLHttpRequest();
+
+            request.onreadystatechange = function () {
+                console.log(request.readyState);
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        return success(request.responseText);
+                    } else {
+                        return fail(request.status);
+                    }
+                }
+            }
+            //open设置请求方式和请求路径
+            request.open("post",
+                "http://rap2.taobao.org:38080/app/mock/249013/bookAction/getBookByName"); //一个servlet，后面还可以写是否同步
+            //设置请求头
+            request.setRequestHeader("content-type", "application/x-www-form-urlencoded")
+            //send 发送
+            request.send("bookId=998");
+        }
+
+        function isSupported() {
+            "use strict";
+
+            new Promise(function () {});
+
+            // 直接运行测试:
+            console.log('支持Promise!');
+        }
+
+        function randomFun(resolve, reject) {
+            var timeOut = Math.random() * 2;
+            console.log('set timeout to: ' + timeOut + ' seconds.');
+            setTimeout(function () {
+                if (timeOut < 1) {
+                    console.log('call resolve()...');
+                    resolve('200 OK');
+                } else {
+                    console.log('call reject()...');
+                    reject('timeout in ' + timeOut + ' seconds.');
+                }
+            }, timeOut * 1000);
+        }
+
+        function promiseTest1() {
+            // var p1 = new Promise(randomFun);
+            // var p2 = p1.then(function (result) {
+            //     console.log('成功：' + result);
+            // });
+            // var p3 = p2.catch(function (reason) {
+            //     console.log('失败：' + reason);
+            // });
+
+            new Promise(randomFun).then(function (result) {
+                console.log('成功：' + result);
+            }).catch(function (reason) {
+                console.log('失败：' + reason);
+            });
+        }
+
+        "use strict";
+
+        // 清除log:
+        var logging = document.getElementById('test-promise-log');
+        while (logging.children.length > 1) {
+            logging.removeChild(logging.children[logging.children.length - 1]);
+        }
+
+        // 输出log到页面:
+        function log(s) {
+            var p = document.createElement('p');
+            p.innerHTML = s;
+            logging.appendChild(p);
+        }
+
+        function promiseTest2() {
+            new Promise(function (resolve, reject) {
+                log('start new Promise...');
+                var timeOut = Math.random() * 2;
+                log('set timeout to: ' + timeOut + ' seconds.');
+                setTimeout(function () {
+                    if (timeOut < 1) {
+                        log('call resolve()...');
+                        resolve('200 OK');
+                    } else {
+                        log('call reject()...');
+                        reject('timeout in ' + timeOut + ' seconds.');
+                    }
+                }, timeOut * 1000);
+            }).then(function (r) {
+                log('Done: ' + r);
+            }).catch(function (reason) {
+                log('Failed: ' + reason);
+            });
+        }
+
+        // 0.5秒后返回input*input的计算结果:
+        function multiply(input) {
+            return new Promise(function (resolve, reject) {
+                log('calculating ' + input + ' x ' + input + '...');
+                setTimeout(resolve, 500, input * input);
+            });
+        }
+
+        // 0.5秒后返回input+input的计算结果:
+        function add(input) {
+            return new Promise(function (resolve, reject) {
+                log('calculating ' + input + ' + ' + input + '...');
+                setTimeout(resolve, 500, input + input);
+            });
+        }
+
+        function promiseTest3() {
+            var p = new Promise(function (resolve, reject) {
+                log('start new Promise...');
+                resolve(123);
+            });
+
+            p.then(multiply)
+                .then(add)
+                .then(multiply)
+                .then(add)
+                .then(function (result) {
+                    log('Got value: ' + result);
+                });
+        }
+    </script>
+</body>
+
+</html>

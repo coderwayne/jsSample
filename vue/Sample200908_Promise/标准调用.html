@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <input type="button" value="写法一" onclick="promiseTest1()">
+        <input type="button" value="resolve多参数" onclick="promiseTest2()">
+        <input type="button" value="简写一" onclick="forShort1()">
+        <input type="button" value="简写二" onclick="forShort2()">
+    </div>
+    <div id="logBox" style="border: solid 1px #ccc; padding: 1em; margin: 15px 0;">
+        <p>Log:</p>
+    </div>
+    <script>
+        function forShort1() {
+            new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    resolve("18");
+                } else {
+                    reject(random);
+                }
+            }).then(function (param) {
+                log("根据Id:" + param + "得到了一个用户");
+            }).catch(function (param) {
+                log("调用失败，错误码：" + param);
+            })
+        }
+
+        function forShort2() {log("for short 222");
+            new Promise(function (resolve, reject) {
+                var user = new Object();
+                user.userId = "37";
+                user.userName = "Wayne";
+
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    resolve(user);
+                } else {
+                    reject(random);
+                }
+            }).then(obj => {
+                log("新增用户ID：" + obj.userId + "，用户名：" + obj.userName);
+            }).catch(param => {
+                log("调用失败，错误码：" + param);
+            })
+        }
+
+        function getUserById(userId) {
+            return new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    resolve(userId);
+                } else {
+                    reject(random);
+                }
+            })
+        }
+
+        function testFun1(param) {
+            log("根据Id:" + param + "得到了一个用户")
+        }
+
+        function testFun2(param) {
+            log("调用失败，错误码：" + param)
+        }
+
+        function promiseTest1() {
+            var p1 = getUserById("123").then(testFun1).catch(testFun2);
+        }
+
+        function insertUser(userObj) {
+            return new Promise(function (resolve, reject) {
+                var random = Math.random() * 10;
+
+                if (random < 5) {
+                    resolve(userObj);
+                } else {
+                    reject(random);
+                }
+            })
+        }
+
+        function testFun3(param) {
+            log("新增用户ID：" + param.userId + "，用户名：" + param.userName);
+        }
+
+        function promiseTest2() {
+            var user = new Object();
+            user.userId = "211";
+            user.userName = "Ellie";
+            var p1 = insertUser(user).then(testFun3).catch(testFun2);
+        }
+
+        // 清除log:
+        var logBox = document.getElementById("logBox");
+        while (logBox.children.length > 1) {
+            logBox.removeChild(logBox.children[logBox.children.length - 1]);
+        }
+
+        // 输出log到页面:
+        function log(s) {
+            var p = document.createElement('p');
+            p.innerHTML = s;
+            logBox.appendChild(p);
+        }
+    </script>
+</body>
+
+</html>
