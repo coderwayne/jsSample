@@ -1,0 +1,22 @@
+<html>
+<body>
+ 
+<textarea rows="10" cols="20" id="my">
+</textarea>
+ 
+<button onClick="test()">test</button>
+ 
+<script>
+ 
+var i = 1;
+function test()
+{
+	var obj = document.getElementById("my");
+    obj.value += i + "\n";
+    i++;
+	obj.scrollTop = obj.scrollHeight; // good
+}
+</script>
+ 
+</body>
+</html>
