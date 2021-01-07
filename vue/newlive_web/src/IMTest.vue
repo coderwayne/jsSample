@@ -1,12 +1,13 @@
 <template>
   <div id="myBox">
-    <h2 style="text-align: center">这是IM测试页!!!</h2>
+    <h2 style="text-align: center">这是IM测试页</h2>
     <MessageBoard ref="messageBoard" style="margin: 10px"></MessageBoard>
     <div class="leftBtnBox">
       <el-input v-model="userName" placeholder="user name"></el-input>
       <el-button @click="generateUserSig()">请求userSig</el-button>
       <el-button @click="initTIMManager()">初始化TIMManager</el-button>
       <el-button @click="loginAction()">登录</el-button>
+      <el-button @click="logoutAction()">注销登录</el-button>
       <el-button @click="addNewMsg('老胡啊!!')">添加新消息</el-button>
     </div>
   </div>
@@ -14,6 +15,12 @@
 
 <script>
 import MessageBoard from "./components/MessageBoard";
+// import {onSDK_READY} from "./event/TIMManagerEvent";
+
+import * as TIMEvent from "./event/TIMManagerEvent";
+
+// import { formatDate } from "./utils/common";
+// import "./event/TIMManagerEvent";
 import TIM from "tim-js-sdk";
 import COS from "cos-js-sdk-v5";
 
@@ -31,7 +38,13 @@ export default {
   },
   methods: {
     addNewMsg(info) {
-      this.$refs.messageBoard.appendText(info);
+      // this.$refs.messageBoard.appendText(info);
+      // tempFunction(); // eslint-disable-line no-undef
+      // TIMEvent.onSDK_READY();
+      // TIMEvent.myFun1();
+      // TIMEvent.myFun2();
+      // TIMEvent.myFun3();
+      // TIMEvent.myFun4();
     },
     // step 1 : 根据用户名生成userSig
     generateUserSig() {
@@ -73,12 +86,34 @@ export default {
 
       var that = this;
 
-      // 监听事件，例如：
-      this.myTim.on(TIM.EVENT.SDK_READY, function (event) {
-        that.$refs.messageBoard.appendText("TIM.EVENT.SDK_READY");
-        // 收到离线消息和会话列表同步完毕通知，接入侧可以调用 sendMessage 等需要鉴权的接口
-        // event.name - TIM.EVENT.SDK_READY
+      this.myTim.on(TIM.EVENT.SDK_READY, function fn(event) {
+        var myData = { id: 5, name: "张三" };
+        TIMEvent.onSDK_READY(event, myData);
       });
+
+      this.myTim.on(TIM.EVENT.SDK_READY, function fn(event) {
+        console.log("第22222222222222次触发了");
+      });
+
+      return;
+
+      // this.myTim.on(TIM.EVENT.SDK_READY, {id: '123'}, function (e) {});
+
+      // this.myTim.on(TIM.EVENT.SDK_READY, function (e) {
+      //   console.log("虎虎虎"+e.data.foo);
+      // }, {foo: "bar"});
+
+      //       $("#i_" + id).on("click", {id: '123'}, function (e) {
+      //     $("#li_tab_" + e.data.id).remove();
+      //     ……
+      // });
+
+      // 监听事件，例如：
+      // this.myTim.on(TIM.EVENT.SDK_READY, function (event) {
+      //   that.$refs.messageBoard.appendText("TIM.EVENT.SDK_READY");
+      //   // 收到离线消息和会话列表同步完毕通知，接入侧可以调用 sendMessage 等需要鉴权的接口
+      //   // event.name - TIM.EVENT.SDK_READY
+      // });
 
       this.myTim.on(TIM.EVENT.MESSAGE_RECEIVED, function (event) {
         that.$refs.messageBoard.appendText("TIM.EVENT.MESSAGE_RECEIVED");
@@ -170,15 +205,19 @@ export default {
     loginAction() {
       let promise = this.myTim.login({
         userID: this.userName,
-        userSig: this.userSig
+        userSig: this.userSig,
       });
 
       var that = this;
-      promise.then(function (imResponse) {
-          that.$refs.messageBoard.appendText(imResponse.data); // 登录成功
-          if (imResponse.data.repeatLogin === true) {
-            // 标识账号已登录，本次登录操作为重复登录。v2.5.1 起支持
-            that.$refs.messageBoard.appendText("imResponse.data.errorInfo");
+      promise
+        .then(function (imResponse) {
+          if (imResponse.data.actionStatus.toLowerCase() == "ok") {
+            if (imResponse.data.repeatLogin == true) {
+              // 标识账号已登录，本次登录操作为重复登录。v2.5.1 起支持
+              that.$refs.messageBoard.appendText(imResponse.data.errorInfo);
+            } else {
+              that.$refs.messageBoard.appendText("登录成功");
+            }
           }
         })
         .catch(function (imError) {
@@ -186,19 +225,23 @@ export default {
         });
     },
 
-    // - (IBAction)loginAction:(id)sender {
-    //     TIMLoginParam * login_param = [[TIMLoginParam alloc ]init];
-    //     // identifier 为用户名
-    //     login_param.identifier = _txtUserName.text;
-    //     //userSig 为用户登录凭证
-    //     login_param.userSig = _userSig;
-    //     //appidAt3rd App 用户使用 OAuth 授权体系分配的 Appid，在私有帐号情况下，填写与 SDKAppID 一样
-    //     login_param.appidAt3rd = @"1400343975";
-    //     [[TIMManager sharedInstance] login: login_param succ:^(){
-    //         [self appendInfoText:@"登录成功"];
-
+    // 注销
+    logoutAction() {
+      let promise = this.myTim.logout();
+      var that = this;
+      promise
+        .then(function (imResponse) {
+          that.$refs.messageBoard.appendText("登出成功" + imResponse.data); // 登出成功
+        })
+        .catch(function (imError) {
+          that.$refs.messageBoard.appendText("logout error:", imError);
+        });
+    },
+    // - (IBAction)logoutAction:(id)sender {
+    //     [[TIMManager sharedInstance] logout:^() {
+    //         [self appendInfoText:@"注销登录成功"];
     //     } fail:^(int code, NSString * err) {
-    //         [self appendInfoText:[NSString stringWithFormat:@"登录失败：：%d->%@", code, err]];
+    //         [self appendInfoText:[NSString stringWithFormat:@"注销登录失败: code=%d err=%@", code, err]];
     //     }];
     // }
     //华丽的分割线end

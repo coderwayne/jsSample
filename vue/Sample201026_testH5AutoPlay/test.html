@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>bbb333</h3>
+
+
+    <iframe src="./silence.mp3" type="audio/mp3" allow="autoplay" id="audio" style="display:none">
+    </iframe>
+    <audio autoplay>
+        <source src="./silence.mp3" type="audio/mp3">
+    </audio>
+
+    <video id="video" controls autoplay muted style="width: 400px; height: 300px; object-fit: contain;">
+        <source src="http://gheh5u4y9n2ufvykx9r.exp.bcevod.com/mda-kjffkgh0kd8htpxc/mda-kjffkgh0kd8htpxc.mp4"
+            type="video/mp4">
+    </video>
+
+
+
+
+    <input type="button" value="Test" onclick="justTest()">
+</body>
+<script>
+    setTimeout(function () {
+        var video = document.getElementById("video");
+        video.play();
+    }, 1000);
+
+    // function justTest() {
+
+
+
+    //     // document.getElementById('video').play();
+
+
+    // }
+</script>
+
+</html>

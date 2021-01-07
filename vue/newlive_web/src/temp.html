@@ -1,22 +1,37 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+    window.onload = function() {
+        var box1 = document.getElementById("myBox1");
+        box1.onclick = function() {
+            console.log("first call");
+        };
+        box1.onclick = function() {
+            console.log("call again");
+        };
+        // print "call again"
+
+        var box2 = document.getElementById("myBox2");
+        box2.addEventListener("click", function() {
+            console.log("first call");
+        });
+        box2.addEventListener("click", function() {
+            console.log("call again");
+        });
+        // print "first call" and "call again"
+    }
+    </script>
+</head>
+
 <body>
- 
-<textarea rows="10" cols="20" id="my">
-</textarea>
- 
-<button onClick="test()">test</button>
- 
-<script>
- 
-var i = 1;
-function test()
-{
-	var obj = document.getElementById("my");
-    obj.value += i + "\n";
-    i++;
-	obj.scrollTop = obj.scrollHeight; // good
-}
-</script>
- 
+    <h3>addEventListener和on区别</h3>
+    <div id="myBox1" style="background-color: silver; width: 100px; height: 100px;"></div>
+    <div id="myBox2" style="background-color: rosybrown; width: 100px; height: 100px;"></div>
 </body>
+
 </html>

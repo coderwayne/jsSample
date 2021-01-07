@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老胡留言板</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            border: 1px silver solid;
+            width: 70%;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        li {
+            background-color: #d6d6d6;
+            margin: 10px;
+            line-height: 45px;
+            height: 45px;
+            padding-left: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div style="text-align: center; font-size:24px; padding: 15px;"><a href="/bbs">首页</a><a href="/post" style="margin-left: 25px;">发表留言</a></div>
+    <h2 style="text-align: center;">老胡留言板</h2>
+    <ul>
+        {{each comments}}
+        <li>
+            <span>{{ $value.nickName }}</span>：
+            <label>{{ $value.content }}</label>
+            <span style="float: right; margin-right: 10px;">{{ $value.postTime }}</span>
+        </li>
+        {{/each}}
+    </ul>
+    <div style="text-align: center; margin-top: 125px;">
+        <img src="/public/images/2.jpg" style="width: 100px;">
+    </div>
+
+</body>
+
+</html>

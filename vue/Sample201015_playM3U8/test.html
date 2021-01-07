@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Test Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <template id="myTemplate">
+        <div style="background-color: bisque;">这是一个子控件</div>
+    </template>
+    <div id="myBox">
+        <h3 ref="myh3">寻梦环游记</h3>
+        <tmp-component ref="myComp"></tmp-component>
+        <input type="button" @click="buttonClicked" value="测试点击">
+    </div>
+    <script>
+        var hxwTemplate = {
+            template:"#myTemplate",
+            data:function(){
+                return{
+                    tmpMsg:"遥不可及的你"
+                }
+            },
+            methods:{
+                tmpFun(strParam){
+                    console.log("template function fired"+strParam);
+                }
+            }
+        };
+
+
+        var myBox = new Vue({
+            el: "#myBox",
+            data: {
+                myMsg: "Remember Me"
+            },
+            methods: {
+                buttonClicked() {
+                    console.log("buttonClicked fired");
+                    console.log(this.$refs.myh3.innerText);
+                    console.log(this.$refs.myComp.tmpMsg);
+                    this.$refs.myComp.tmpFun("老胡");
+                }
+            },
+            components: {
+                tmpComponent: hxwTemplate
+            }
+        });
+    </script>
+</body>
+
+</html>
